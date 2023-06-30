@@ -10,6 +10,10 @@
     "test": "jest"
   },
   "dependencies": {
+    "@react-native-firebase/app": "^18.1.0",
+    "@react-native-firebase/auth": "^18.1.0",
+    "@react-native-firebase/firestore": "^18.1.0",
+    "@react-native-google-signin/google-signin": "^10.0.1",
     "@react-navigation/material-top-tabs": "^6.6.3",
     "@react-navigation/native": "^6.1.7",
     "@react-navigation/native-stack": "^6.9.13",
