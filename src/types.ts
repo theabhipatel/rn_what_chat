@@ -1,7 +1,10 @@
 export type IRootStackParamList = {
   Splash: undefined;
   Login: undefined;
-  Chat: undefined | {name: string; photo: string};
+  Chat: {
+    id: string;
+    data: IUser;
+  };
   Tabs: undefined;
   Profile: undefined;
 };
@@ -10,3 +13,10 @@ export type IRootTabParamList = {
   Status: undefined;
   Calls: undefined;
 };
+
+export interface IUser {
+  email: string;
+  name: string;
+  photo: string;
+  userId: string;
+}

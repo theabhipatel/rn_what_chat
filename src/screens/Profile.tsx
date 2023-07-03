@@ -6,7 +6,7 @@ import {useNavigation} from '@react-navigation/native';
 const Profile = ({}) => {
   const navigation = useNavigation();
   const signOut = async () => {
-    GoogleSignin.signOut();
+    await GoogleSignin.signOut();
     navigation.navigate('Login');
   };
   return (

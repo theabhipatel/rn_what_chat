@@ -1,23 +1,27 @@
-import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import React, {useEffect} from 'react';
 import {useNavigation} from '@react-navigation/native';
+import {IRootStackParamList, IUser} from '../types';
 
-const ChatBox = ({user}) => {
+const ChatBox = ({user, id}: {user: IUser; id: string}) => {
   const navigation = useNavigation();
 
   return (
     <TouchableOpacity
-      onPress={() =>
-        navigation.navigate('Chat', {name: user.name, photo: user.photo})
-      }
+      onPress={() => navigation.navigate('Chat', {id, data: user})}
       style={styles.box}>
       <View
         style={{
           height: 40,
           width: 40,
-          backgroundColor: '#111',
+
           borderRadius: 20,
-        }}></View>
+        }}>
+        <Image
+          source={{uri: user.photo}}
+          style={{width: 40, height: 40, borderRadius: 20}}
+        />
+      </View>
       <View>
         <Text style={styles.nameText}>{user.name}</Text>
       </View>
