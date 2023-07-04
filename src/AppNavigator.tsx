@@ -1,4 +1,11 @@
-import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {
+  Image,
+  StatusBar,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import React from 'react';
 import {NavigationContainer, useNavigation} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
@@ -15,6 +22,8 @@ const Stack = createNativeStackNavigator<IRootStackParamList>();
 const AppNavigator = () => {
   return (
     <NavigationContainer>
+      <StatusBar backgroundColor={'#000'} />
+
       <Stack.Navigator initialRouteName="Splash">
         <Stack.Screen
           name="Splash"
@@ -31,16 +40,52 @@ const AppNavigator = () => {
           name="Tabs"
           component={TopTabNavigator}
           options={{
-            headerShown: true,
-            title: 'WhatsChat',
-            headerRight: () => (
-              <TouchableOpacity>
-                <Image
-                  source={require('./images/dots.png')}
-                  style={{width: 20, height: 20}}
-                />
-              </TouchableOpacity>
-            ),
+            header: () => {
+              return (
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    paddingHorizontal: 10,
+                    backgroundColor: '#128C7E',
+                    paddingVertical: 6,
+                  }}>
+                  <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                    <Text
+                      style={{
+                        fontSize: 20,
+                        fontWeight: '700',
+                        color: '#fff',
+                      }}>
+                      WhatsChat
+                    </Text>
+                  </View>
+                  <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                    <TouchableOpacity>
+                      <Image
+                        source={require('./images/search.png')}
+                        style={{width: 20, height: 20, tintColor: '#fff'}}
+                      />
+                    </TouchableOpacity>
+                    <View style={{marginRight: 18}} />
+                    <TouchableOpacity>
+                      <Image
+                        source={require('./images/camera.png')}
+                        style={{width: 28, height: 28, tintColor: '#fff'}}
+                      />
+                    </TouchableOpacity>
+                    <View style={{marginRight: 16}} />
+                    <TouchableOpacity>
+                      <Image
+                        source={require('./images/dots.png')}
+                        style={{width: 22, height: 22, tintColor: '#fff'}}
+                      />
+                    </TouchableOpacity>
+                  </View>
+                </View>
+              );
+            },
 
             headerShadowVisible: false,
           }}

@@ -147,19 +147,20 @@ const styles = StyleSheet.create({
     marginBottom: 4,
   },
   button: {
-    width: '90%',
+    width: '80%',
     borderWidth: 1,
-    borderColor: 'blue',
+    borderColor: '#4287f5',
     paddingHorizontal: 35,
     padding: 5,
     borderRadius: 10,
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    justifyContent: 'space-around',
     alignItems: 'center',
     // elevation: 5,
   },
   loginText: {
     fontSize: 18,
     fontWeight: '500',
+    color: '#000',
   },
 });

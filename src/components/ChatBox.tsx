@@ -3,11 +3,12 @@ import React, {useEffect} from 'react';
 import {useNavigation} from '@react-navigation/native';
 import {IRootStackParamList, IUser} from '../types';
 
-const ChatBox = ({user, id}: {user: IUser; id: string}) => {
+const ChatBox = ({user, id}: {user: IUser; id: string | undefined}) => {
   const navigation = useNavigation();
 
   return (
     <TouchableOpacity
+      // @ts-ignore
       onPress={() => navigation.navigate('Chat', {id, data: user})}
       style={styles.box}>
       <View
@@ -34,8 +35,8 @@ export default ChatBox;
 const styles = StyleSheet.create({
   box: {
     width: '100%',
-    borderWidth: 0.5,
-    borderColor: '#CCC',
+    // borderWidth: 0.5,
+    // borderColor: '#CCC',
     flexDirection: 'row',
     alignItems: 'center',
     padding: 5,

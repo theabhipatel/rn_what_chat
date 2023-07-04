@@ -3,8 +3,9 @@ import React from 'react';
 
 const Status = () => {
   return (
-    <View>
-      <Text>Status</Text>
+    <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+      <Text style={{fontSize: 20}}>Status</Text>
+      <Text>Currently unavailable</Text>
     </View>
   );
 };
