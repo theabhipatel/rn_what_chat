@@ -2,10 +2,9 @@ import {StatusBar, StyleSheet, Text, View} from 'react-native';
 import React from 'react';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 import Home from './screens/Home';
-import Status from './screens/Status';
+import Status from './screens/status/Status';
 import Calls from './screens/Calls';
 import {IRootTabParamList} from './types';
-import Profile from './screens/Profile';
 
 const Tab = createMaterialTopTabNavigator<IRootTabParamList>();
 

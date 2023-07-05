@@ -28,7 +28,6 @@ const TopMenuModal: FC<IProps> = ({toggleModal, setToggleModal}) => {
   const navigation = useNavigation<NavigationPropType>();
   const gotoSettingsScreen = useCallback(() => {
     navigation.navigate('Profile');
-    console.log(' i a m pressed .....');
   }, []);
   const slideAnimation = useRef(new Animated.Value(0)).current;
 
@@ -75,7 +74,7 @@ const TopMenuModal: FC<IProps> = ({toggleModal, setToggleModal}) => {
                 top: 0,
                 right: 0,
                 width: 120,
-                height: 150,
+
                 backgroundColor: '#eee',
                 elevation: 10,
                 transform: [{translateY}],
@@ -104,6 +103,18 @@ const TopMenuModal: FC<IProps> = ({toggleModal, setToggleModal}) => {
                 setToggleModal(false);
               }}>
               <Text style={{color: '#000', letterSpacing: 1}}>Settings</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={{
+                width: '100%',
+                paddingLeft: 10,
+                padding: 5,
+              }}
+              onPress={() => {
+                gotoSettingsScreen();
+                setToggleModal(false);
+              }}>
+              <Text style={{color: '#000', letterSpacing: 1}}>Group</Text>
             </TouchableOpacity>
             <TouchableOpacity
               style={{
