@@ -28,7 +28,7 @@ const StatusNotSeen = () => {
           <Text style={{fontSize: 16, color: '#000', fontWeight: '500'}}>
             Game ji
           </Text>
-          <Text style={{fontSize: 12}}>43 minutes ago</Text>
+          <Text style={{fontSize: 12, color: '#aaa'}}>43 minutes ago</Text>
         </View>
       </View>
     </View>

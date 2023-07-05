@@ -83,7 +83,9 @@ const Calls = () => {
                       source={require('../images/down-left-arrow.png')}
                       style={{width: 12, height: 12, tintColor: 'red'}}
                     />
-                    <Text style={{fontSize: 12}}>Today, 9:33 am</Text>
+                    <Text style={{fontSize: 12, color: '#aaa'}}>
+                      Today, 9:33 am
+                    </Text>
                   </View>
                 </View>
               </View>

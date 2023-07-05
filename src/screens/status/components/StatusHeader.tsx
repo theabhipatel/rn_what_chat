@@ -42,11 +42,13 @@ const StatusHeader = () => {
           <Text style={{fontSize: 16, color: '#000', fontWeight: '500'}}>
             My status
           </Text>
-          <Text style={{fontSize: 12}}>Tap to add status update</Text>
+          <Text style={{fontSize: 12, color: '#aaa'}}>
+            Tap to add status update
+          </Text>
         </View>
       </View>
       <View style={{marginVertical: 10}}>
-        <Text>Recent updates</Text>
+        <Text style={{color: '#aaa'}}>Recent updates</Text>
       </View>
     </View>
   );
