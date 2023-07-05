@@ -7,9 +7,9 @@ const StatusSeen = () => {
       <View style={{flexDirection: 'row', alignItems: 'center'}}>
         <View
           style={{
-            width: 40,
-            height: 40,
-            borderRadius: 20,
+            width: 50,
+            height: 50,
+            borderRadius: 25,
             borderWidth: 1.8,
             borderColor: '#bbb',
             justifyContent: 'center',
@@ -17,9 +17,9 @@ const StatusSeen = () => {
           }}>
           <View
             style={{
-              width: '95%',
-              height: '95%',
-              borderRadius: 20,
+              width: '92%',
+              height: '92%',
+              borderRadius: 25,
               backgroundColor: '#ccc',
             }}></View>
           {/* <Image source={} /> */}

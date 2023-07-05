@@ -7,21 +7,20 @@ const Calls = () => {
       <View>
         <FlatList
           data={[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]}
-          style={{paddingHorizontal: 8}}
+          style={{paddingHorizontal: 15}}
           ListHeaderComponent={() => (
             <View>
               <View
                 style={{
                   flexDirection: 'row',
                   alignItems: 'center',
-
                   marginTop: 10,
                 }}>
                 <View
                   style={{
-                    width: 40,
-                    height: 40,
-                    borderRadius: 20,
+                    width: 50,
+                    height: 50,
+                    borderRadius: 25,
                     backgroundColor: '#128C7E',
                     justifyContent: 'center',
                     alignItems: 'center',
@@ -50,7 +49,7 @@ const Calls = () => {
               </View>
             </View>
           )}
-          ItemSeparatorComponent={() => <View style={{marginVertical: 4}} />}
+          ItemSeparatorComponent={() => <View style={{marginVertical: 8}} />}
           renderItem={() => (
             <View
               style={{
@@ -61,9 +60,9 @@ const Calls = () => {
               <View style={{flexDirection: 'row', alignItems: 'center'}}>
                 <View
                   style={{
-                    width: 40,
-                    height: 40,
-                    borderRadius: 20,
+                    width: 50,
+                    height: 50,
+                    borderRadius: 25,
                     backgroundColor: '#ccc',
                     justifyContent: 'center',
                     alignItems: 'center',
@@ -94,6 +93,27 @@ const Calls = () => {
                   style={{width: 16, height: 16, tintColor: '#128C7E'}}
                 />
               </View>
+            </View>
+          )}
+          ListFooterComponent={() => (
+            <View
+              style={{
+                marginBottom: 50,
+                marginTop: 20,
+                borderTopWidth: 0.51,
+                borderColor: '#ddd',
+                flexDirection: 'row',
+                paddingVertical: 10,
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}>
+              <Image
+                source={require('../images/lock.png')}
+                style={{width: 12, height: 12, tintColor: '#128C7E'}}
+              />
+              <Text style={{color: '#128C7E', marginLeft: 5}}>
+                Your calls are end-to-encripted
+              </Text>
             </View>
           )}
         />

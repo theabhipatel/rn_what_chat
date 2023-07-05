@@ -12,9 +12,9 @@ const StatusHeader = () => {
         }}>
         <View
           style={{
-            width: 40,
-            height: 40,
-            borderRadius: 20,
+            width: 50,
+            height: 50,
+            borderRadius: 25,
             backgroundColor: '#ccc',
           }}>
           {/* <Image source={} /> */}
@@ -23,10 +23,10 @@ const StatusHeader = () => {
               position: 'absolute',
               bottom: 0,
               right: 0,
-              height: 16,
-              width: 16,
+              height: 22,
+              width: 22,
               backgroundColor: '#128C7E',
-              borderRadius: 8,
+              borderRadius: 11,
               justifyContent: 'center',
               alignItems: 'center',
               borderWidth: 1,

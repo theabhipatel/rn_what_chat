@@ -13,14 +13,13 @@ const ChatBox = ({user, id}: {user: IUser; id: string | undefined}) => {
       style={styles.box}>
       <View
         style={{
-          height: 40,
-          width: 40,
-
-          borderRadius: 20,
+          height: 48,
+          width: 48,
+          borderRadius: 25,
         }}>
         <Image
           source={{uri: user.photo}}
-          style={{width: 40, height: 40, borderRadius: 20}}
+          style={{width: 48, height: 48, borderRadius: 25}}
         />
       </View>
       <View>
@@ -35,12 +34,9 @@ export default ChatBox;
 const styles = StyleSheet.create({
   box: {
     width: '100%',
-    // borderWidth: 0.5,
-    // borderColor: '#CCC',
     flexDirection: 'row',
     alignItems: 'center',
-    padding: 5,
-    marginVertical: 2,
+    paddingVertical: 3,
     borderRadius: 3,
   },
   nameText: {

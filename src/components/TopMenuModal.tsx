@@ -73,7 +73,7 @@ const TopMenuModal: FC<IProps> = ({toggleModal, setToggleModal}) => {
                 position: 'absolute',
                 top: 0,
                 right: 0,
-                width: 120,
+                width: 180,
 
                 backgroundColor: '#eee',
                 elevation: 10,
@@ -90,7 +90,9 @@ const TopMenuModal: FC<IProps> = ({toggleModal, setToggleModal}) => {
                 gotoSettingsScreen();
                 setToggleModal(false);
               }}>
-              <Text style={{color: '#000', letterSpacing: 1}}>Profile</Text>
+              <Text style={{color: '#000', letterSpacing: 0.5, fontSize: 16}}>
+                Profile
+              </Text>
             </TouchableOpacity>
             <TouchableOpacity
               style={{
@@ -102,7 +104,9 @@ const TopMenuModal: FC<IProps> = ({toggleModal, setToggleModal}) => {
                 gotoSettingsScreen();
                 setToggleModal(false);
               }}>
-              <Text style={{color: '#000', letterSpacing: 1}}>Settings</Text>
+              <Text style={{color: '#000', letterSpacing: 0.5, fontSize: 16}}>
+                Settings
+              </Text>
             </TouchableOpacity>
             <TouchableOpacity
               style={{
@@ -114,7 +118,9 @@ const TopMenuModal: FC<IProps> = ({toggleModal, setToggleModal}) => {
                 gotoSettingsScreen();
                 setToggleModal(false);
               }}>
-              <Text style={{color: '#000', letterSpacing: 1}}>Group</Text>
+              <Text style={{color: '#000', letterSpacing: 0.5, fontSize: 16}}>
+                Group
+              </Text>
             </TouchableOpacity>
             <TouchableOpacity
               style={{
@@ -126,7 +132,7 @@ const TopMenuModal: FC<IProps> = ({toggleModal, setToggleModal}) => {
                 gotoSettingsScreen();
                 setToggleModal(false);
               }}>
-              <Text style={{color: '#000', letterSpacing: 1}}>
+              <Text style={{color: '#000', letterSpacing: 0.5, fontSize: 16}}>
                 Linked device
               </Text>
             </TouchableOpacity>

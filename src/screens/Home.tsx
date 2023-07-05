@@ -14,6 +14,7 @@ import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {IRootStackParamList, IRootTabParamList} from '../types';
 import {CompositeScreenProps} from '@react-navigation/native';
 import {MaterialTopTabScreenProps} from '@react-navigation/material-top-tabs';
+import StatusNotSeen from './status/components/StatusNotSeen';
 
 type IProps = CompositeScreenProps<
   MaterialTopTabScreenProps<IRootTabParamList, 'Home'>,
@@ -68,17 +69,17 @@ const Home: FC<IProps> = () => {
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
         }
+        style={{paddingHorizontal: 15, paddingTop: 8}}
         renderItem={({item}) => <ChatBox user={item} id={id} />}
-        ItemSeparatorComponent={() => (
-          <View style={{height: 0.5, backgroundColor: '#ddd', width: '100%'}} />
-        )}
+        ItemSeparatorComponent={() => <View style={{marginVertical: 8}} />}
         ListFooterComponent={() => (
           <View
             style={{
               borderTopWidth: 0.51,
               borderColor: '#ddd',
-              flexDirection: 'row',
+              marginVertical: 10,
               paddingVertical: 10,
+              flexDirection: 'row',
               justifyContent: 'center',
               alignItems: 'center',
             }}>
@@ -101,6 +102,5 @@ export default Home;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 10,
   },
 });
