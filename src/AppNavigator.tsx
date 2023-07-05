@@ -1,12 +1,14 @@
 import {
   Image,
+  Modal,
   StatusBar,
   StyleSheet,
   Text,
   TouchableOpacity,
+  TouchableWithoutFeedback,
   View,
 } from 'react-native';
-import React from 'react';
+import React, {useCallback, useState} from 'react';
 import {NavigationContainer, useNavigation} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import Splash from './screens/Splash';
@@ -16,10 +18,13 @@ import Home from './screens/Home';
 import TopTabNavigator from './TopTabNavigator';
 import Profile from './screens/Profile';
 import Chat from './screens/Chat';
+import TopMenuModal from './components/TopMenuModal';
 
 const Stack = createNativeStackNavigator<IRootStackParamList>();
 
 const AppNavigator = () => {
+  const [toggleModal, setToggleModal] = useState(false);
+
   return (
     <NavigationContainer>
       <StatusBar backgroundColor={'#000'} />
@@ -76,13 +81,17 @@ const AppNavigator = () => {
                       />
                     </TouchableOpacity>
                     <View style={{marginRight: 16}} />
-                    <TouchableOpacity>
+                    <TouchableOpacity onPress={() => setToggleModal(true)}>
                       <Image
                         source={require('./images/dots.png')}
                         style={{width: 22, height: 22, tintColor: '#fff'}}
                       />
                     </TouchableOpacity>
                   </View>
+                  <TopMenuModal
+                    setToggleModal={setToggleModal}
+                    toggleModal={toggleModal}
+                  />
                 </View>
               );
             },

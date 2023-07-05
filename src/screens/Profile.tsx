@@ -1,10 +1,10 @@
 import {StyleSheet, Text, View} from 'react-native';
-import React from 'react';
+import React, {FC} from 'react';
 import {GoogleSignin} from '@react-native-google-signin/google-signin';
-import {useNavigation} from '@react-navigation/native';
-
-const Profile = ({}) => {
-  const navigation = useNavigation();
+import {NativeStackScreenProps} from '@react-navigation/native-stack';
+import {IRootStackParamList} from '../types';
+type IProps = NativeStackScreenProps<IRootStackParamList, 'Profile'>;
+const Profile: FC<IProps> = ({navigation}) => {
   const signOut = async () => {
     await GoogleSignin.signOut();
     navigation.navigate('Login');

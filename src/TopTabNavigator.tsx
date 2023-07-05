@@ -36,7 +36,7 @@ const TopTabNavigator = () => {
           options={{tabBarLabel: 'Chats'}}
         />
         <Tab.Screen name="Status" component={Status} />
-        <Tab.Screen name="Calls" component={Profile} />
+        <Tab.Screen name="Calls" component={Calls} />
       </Tab.Navigator>
     </>
   );
