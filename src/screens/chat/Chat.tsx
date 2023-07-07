@@ -6,10 +6,11 @@ import {
   Text,
   TouchableOpacity,
   View,
+  useColorScheme,
 } from 'react-native';
 import React, {FC, useCallback, useEffect, useState} from 'react';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import {IRootStackParamList} from '../types';
+import {IRootStackParamList} from '../../types';
 import {
   Bubble,
   GiftedChat,
@@ -18,12 +19,18 @@ import {
   Send,
 } from 'react-native-gifted-chat';
 import firestore from '@react-native-firebase/firestore';
+import storage from '@react-native-firebase/storage';
+import SelectCameraOrGalleryModal from './components/SelectCameraOrGalleryModal';
 
 type IProps = NativeStackScreenProps<IRootStackParamList, 'Chat'>;
 
 const Chat: FC<IProps> = ({navigation, route}) => {
-  const [messages, setMessages] = useState<IMessage[]>([]);
   const {photo, userId, name} = route.params.data;
+  const [messages, setMessages] = useState<IMessage[]>([]);
+  const [imagePath, setImagePath] = useState<string>();
+  const [imageUrl, setImageUrl] = useState<string>();
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const themeMode = useColorScheme();
 
   useEffect(() => {
     navigation.setOptions({
@@ -42,7 +49,7 @@ const Chat: FC<IProps> = ({navigation, route}) => {
             <View style={{flexDirection: 'row', alignItems: 'center'}}>
               <TouchableOpacity onPress={() => navigation.goBack()}>
                 <Image
-                  source={require('../images/back.png')}
+                  source={require('../../images/back.png')}
                   style={{width: 25, height: 25, tintColor: '#fff'}}
                 />
               </TouchableOpacity>
@@ -70,21 +77,21 @@ const Chat: FC<IProps> = ({navigation, route}) => {
             <View style={{flexDirection: 'row', alignItems: 'center'}}>
               <TouchableOpacity>
                 <Image
-                  source={require('../images/video-camera.png')}
+                  source={require('../../images/video-camera.png')}
                   style={{width: 25, height: 25, tintColor: '#fff'}}
                 />
               </TouchableOpacity>
               <View style={{marginRight: 18}} />
               <TouchableOpacity>
                 <Image
-                  source={require('../images/phone-call.png')}
+                  source={require('../../images/phone-call.png')}
                   style={{width: 20, height: 20, tintColor: '#fff'}}
                 />
               </TouchableOpacity>
               <View style={{marginRight: 16}} />
               <TouchableOpacity>
                 <Image
-                  source={require('../images/dots.png')}
+                  source={require('../../images/dots.png')}
                   style={{width: 22, height: 22, tintColor: '#fff'}}
                 />
               </TouchableOpacity>
@@ -114,12 +121,25 @@ const Chat: FC<IProps> = ({navigation, route}) => {
     return () => unsubscribe();
   }, []);
 
-  const onSend = useCallback((messages: any[]) => {
+  const uploadImage = useCallback(async () => {
+    if (imagePath) {
+      const newFileName = Date.now().toString();
+      const reference = storage().ref(newFileName);
+      const pathToFile = imagePath;
+      await reference.putFile(pathToFile);
+      let imageUrl = await storage().ref(newFileName).getDownloadURL();
+      setImageUrl(imageUrl);
+    }
+  }, []);
+
+  const onSend = useCallback(async (messages: any[]) => {
+    await uploadImage();
     const msg = messages[0];
     const myMsg = {
       ...msg,
       sendBy: route.params?.id,
       sentTo: userId,
+      image: imageUrl ? imageUrl : '',
       createdAt: Date.parse(msg.createdAt),
     };
     setMessages(prevMessages => GiftedChat.append(prevMessages, myMsg));
@@ -141,7 +161,12 @@ const Chat: FC<IProps> = ({navigation, route}) => {
     <>
       <ImageBackground
         resizeMode="cover"
-        source={require('../images/chatbg.png')}
+        imageStyle={
+          themeMode === 'dark'
+            ? {tintColor: '#fff', backgroundColor: '#111111'}
+            : {}
+        }
+        source={require('../../images/chatbg.png')}
         style={{flex: 1}}>
         <StatusBar backgroundColor={'#128C7E'} />
         <GiftedChat
@@ -151,17 +176,21 @@ const Chat: FC<IProps> = ({navigation, route}) => {
           user={{
             _id: route.params?.id,
           }}
-          timeTextStyle={{right: {color: '#000'}}}
+          timeTextStyle={{
+            right: {color: themeMode === 'dark' ? '#fff' : '#000'},
+          }}
           renderBubble={props => (
             <Bubble
               {...props}
               wrapperStyle={{
                 left: {backgroundColor: '#333333'},
-                right: {backgroundColor: '#dcf8c6'},
+                right: {
+                  backgroundColor: themeMode === 'dark' ? '#075E54' : '#dcf8c6',
+                },
               }}
               textStyle={{
                 left: {color: '#FFF'},
-                right: {color: '#000'},
+                right: {color: themeMode === 'dark' ? '#fff' : '#000'},
               }}
             />
           )}
@@ -175,7 +204,7 @@ const Chat: FC<IProps> = ({navigation, route}) => {
                   marginBottom: 5,
                   marginLeft: 5,
                   marginRight: 55,
-                  borderRadius: 40,
+                  borderRadius: 30,
                   elevation: 1,
                 }}
               />
@@ -183,30 +212,49 @@ const Chat: FC<IProps> = ({navigation, route}) => {
           }}
           renderSend={props => {
             return (
-              <Send {...props}>
-                <View
+              <View style={{flexDirection: 'row'}}>
+                <TouchableOpacity
+                  onPress={() => setIsModalOpen(true)}
                   style={{
-                    backgroundColor: '#128C7E',
                     position: 'absolute',
-                    right: -105,
-                    bottom: 0,
-                    width: 45,
-                    height: 45,
-                    borderRadius: 25,
-                    justifyContent: 'center',
-                    alignItems: 'center',
+                    bottom: 12,
+                    right: 16,
                   }}>
                   <Image
-                    source={require('../images/send.png')}
-                    // resizeMode={'center'}
-                    style={{width: 25, height: 25, tintColor: '#fff'}}
+                    source={require('../../images/camera.png')}
+                    style={{width: 25, height: 25}}
                   />
-                </View>
-              </Send>
+                </TouchableOpacity>
+                <Send {...props}>
+                  <View
+                    style={{
+                      backgroundColor: '#128C7E',
+                      position: 'absolute',
+                      right: -105,
+                      bottom: 0,
+                      width: 45,
+                      height: 45,
+                      borderRadius: 25,
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                    }}>
+                    <Image
+                      source={require('../../images/send.png')}
+                      // resizeMode={'center'}
+                      style={{width: 25, height: 25, tintColor: '#fff'}}
+                    />
+                  </View>
+                </Send>
+              </View>
             );
           }}
         />
       </ImageBackground>
+      <SelectCameraOrGalleryModal
+        isModalOpen={isModalOpen}
+        setIsModalOpen={setIsModalOpen}
+        setImagePath={setImagePath}
+      />
     </>
   );
 };

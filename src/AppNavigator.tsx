@@ -17,7 +17,7 @@ import Login from './screens/Login';
 import Home from './screens/Home';
 import TopTabNavigator from './TopTabNavigator';
 import Profile from './screens/Profile';
-import Chat from './screens/Chat';
+import Chat from './screens/chat/Chat';
 import TopMenuModal from './components/TopMenuModal';
 
 const Stack = createNativeStackNavigator<IRootStackParamList>();
