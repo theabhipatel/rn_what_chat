@@ -53,25 +53,26 @@ const Login: FC<IProps> = ({navigation}) => {
   };
 
   const saveUserInfo = async (user: IUser) => {
+    console.log(' ------- user ------->', user);
+
     try {
       const isUser = await checkUser(user.email);
       if (!isUser) {
-        const userId = uuid.v4();
-        const newUser = await firestore()
-          .collection('users')
-          .doc(userId.toString())
-          .set({
-            name: user.name,
-            email: user.email,
-            photo: user.photo,
-            userId,
-          });
-        if (user.name) {
-          await AsyncStorage.setItem('USER_NAME', user.name);
-          await AsyncStorage.setItem('USER_EMAIL', user.email);
-          await AsyncStorage.setItem('USER_ID', userId.toString());
-        }
+        // const userId = uuid.v4();
+        const newUser = await firestore().collection('users').doc(user.id).set({
+          name: user.name,
+          email: user.email,
+          photo: user.photo,
+          userId: user.id,
+        });
       }
+      if (user.name && user.photo) {
+        await AsyncStorage.setItem('USER_NAME', user.name);
+        await AsyncStorage.setItem('USER_EMAIL', user.email);
+        await AsyncStorage.setItem('USER_PHOTO', user.photo);
+        await AsyncStorage.setItem('USER_ID', user.id);
+      }
+
       navigation.navigate('Tabs');
     } catch (error) {
       console.log(error);
