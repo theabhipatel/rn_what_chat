@@ -19,6 +19,7 @@ import requestCameraPermission from '../../../utils/requestCameraPermission';
 interface IProps {
   isModalOpen: boolean;
   setIsModalOpen: Dispatch<SetStateAction<boolean>>;
+  setIsShowImage: Dispatch<SetStateAction<boolean>>;
   setImageData: Dispatch<SetStateAction<ImagePickerResponse>>;
   width?: '95%' | '80%';
 }
@@ -26,6 +27,7 @@ interface IProps {
 const SelectCameraOrGalleryModal: FC<IProps> = ({
   isModalOpen,
   setIsModalOpen,
+  setIsShowImage,
   setImageData,
   width,
 }) => {
@@ -35,6 +37,8 @@ const SelectCameraOrGalleryModal: FC<IProps> = ({
       const result = await launchCamera({mediaType: 'photo', quality: 0.7});
       if (!result.didCancel) {
         setImageData(result);
+        setIsModalOpen(false);
+        setIsShowImage(true);
       }
     }
   };
@@ -51,6 +55,8 @@ const SelectCameraOrGalleryModal: FC<IProps> = ({
       });
       if (!result.didCancel) {
         setImageData(result);
+        setIsModalOpen(false);
+        setIsShowImage(true);
       }
     }
   };

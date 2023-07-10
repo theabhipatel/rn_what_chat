@@ -1,4 +1,5 @@
 import {
+  ActivityIndicator,
   Image,
   ImageBackground,
   StatusBar,
@@ -23,6 +24,7 @@ import firestore from '@react-native-firebase/firestore';
 import SelectCameraOrGalleryModal from './components/SelectCameraOrGalleryModal';
 import {Asset, ImagePickerResponse} from 'react-native-image-picker';
 import uploadFile from '../../utils/uploadFile';
+import ShowImage from './components/ShowImage';
 
 type IProps = NativeStackScreenProps<IRootStackParamList, 'Chat'>;
 
@@ -30,8 +32,9 @@ const Chat: FC<IProps> = ({navigation, route}) => {
   const {photo, userId, name} = route.params.data;
   const [messages, setMessages] = useState<IMessage[]>([]);
   const [imageData, setImageData] = useState<ImagePickerResponse>({});
-  // const [imageUrl, setImageUrl] = useState<string>();
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [isShowImage, setIsShowImage] = useState<boolean>(false);
+  const [isSending, setIsSending] = useState(false);
   const themeMode = useColorScheme();
 
   useEffect(() => {
@@ -125,6 +128,7 @@ const Chat: FC<IProps> = ({navigation, route}) => {
 
   const onSend = useCallback(
     async (messages: any[]) => {
+      setIsSending(true);
       let imageUrl;
       if (imageData?.assets) {
         if (imageData.assets[0].fileName && imageData.assets[0].uri) {
@@ -132,6 +136,7 @@ const Chat: FC<IProps> = ({navigation, route}) => {
             imageData?.assets[0].fileName,
             imageData?.assets[0].uri,
           );
+          console.log('------- i am in uploadfile after fn');
         }
       }
       console.log('------ imageUrl after uploadImage ------->', imageUrl);
@@ -156,8 +161,11 @@ const Chat: FC<IProps> = ({navigation, route}) => {
         .doc('' + userId + route.params?.id)
         .collection('messages')
         .add(myMsg);
+      setIsSending(false);
+      setIsShowImage(false);
+      setImageData({});
     },
-    [messages],
+    [messages, imageData],
   );
 
   return (
@@ -241,11 +249,17 @@ const Chat: FC<IProps> = ({navigation, route}) => {
                       justifyContent: 'center',
                       alignItems: 'center',
                     }}>
-                    <Image
-                      source={require('../../images/send.png')}
-                      // resizeMode={'center'}
-                      style={{width: 25, height: 25, tintColor: '#fff'}}
-                    />
+                    {isSending ? (
+                      <View>
+                        <ActivityIndicator color={'#fff'} size={30} />
+                      </View>
+                    ) : (
+                      <Image
+                        source={require('../../images/send.png')}
+                        // resizeMode={'center'}
+                        style={{width: 25, height: 25, tintColor: '#fff'}}
+                      />
+                    )}
                   </View>
                 </Send>
               </View>
@@ -257,7 +271,15 @@ const Chat: FC<IProps> = ({navigation, route}) => {
         isModalOpen={isModalOpen}
         setIsModalOpen={setIsModalOpen}
         setImageData={setImageData}
+        setIsShowImage={setIsShowImage}
       />
+      {isShowImage && (
+        <ShowImage
+          setIsShowImage={setIsShowImage}
+          setImageData={setImageData}
+          imgUrl={imageData.assets ? imageData.assets[0].uri : ''}
+        />
+      )}
     </>
   );
 };
