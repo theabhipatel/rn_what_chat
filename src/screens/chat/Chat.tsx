@@ -136,10 +136,8 @@ const Chat: FC<IProps> = ({navigation, route}) => {
             imageData?.assets[0].fileName,
             imageData?.assets[0].uri,
           );
-          console.log('------- i am in uploadfile after fn');
         }
       }
-      console.log('------ imageUrl after uploadImage ------->', imageUrl);
       const msg = messages[0];
       const myMsg = {
         ...msg,
@@ -155,12 +153,20 @@ const Chat: FC<IProps> = ({navigation, route}) => {
         .collection('chats')
         .doc('' + route.params?.id + userId)
         .collection('messages')
-        .add(myMsg);
+        .add(myMsg)
+        .then(res => {})
+        .catch(err => {
+          console.log(err);
+        });
       firestore()
         .collection('chats')
         .doc('' + userId + route.params?.id)
         .collection('messages')
-        .add(myMsg);
+        .add(myMsg)
+        .then(res => {})
+        .catch(err => {
+          console.log(err);
+        });
       setIsSending(false);
       setIsShowImage(false);
       setImageData({});
