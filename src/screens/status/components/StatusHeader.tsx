@@ -1,9 +1,16 @@
-import {Image, StyleSheet, Text, View} from 'react-native';
-import React from 'react';
+import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import React, {Dispatch, FC, SetStateAction} from 'react';
 
-const StatusHeader = () => {
+interface IProps {
+  photo: string;
+  setIsModalOpen: Dispatch<SetStateAction<boolean>>;
+}
+
+const StatusHeader: FC<IProps> = ({setIsModalOpen, photo}) => {
+  console.log('----- photo - ------>', photo);
+
   return (
-    <View>
+    <TouchableOpacity onPress={() => setIsModalOpen(true)}>
       <View
         style={{
           flexDirection: 'row',
@@ -17,7 +24,13 @@ const StatusHeader = () => {
             borderRadius: 25,
             backgroundColor: '#ccc',
           }}>
-          {/* <Image source={} /> */}
+          {photo && (
+            <Image
+              source={{uri: photo}}
+              style={{width: 50, height: 50, borderRadius: 25}}
+            />
+          )}
+
           <View
             style={{
               position: 'absolute',
@@ -50,7 +63,7 @@ const StatusHeader = () => {
       <View style={{marginVertical: 10}}>
         <Text style={{color: '#aaa'}}>Recent updates</Text>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 };
 
