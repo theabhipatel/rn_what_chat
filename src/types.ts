@@ -10,6 +10,7 @@ export type IRootStackParamList = {
   Tabs: undefined;
   Profile: undefined;
   UploadStatus: {data: ImagePickerResponse};
+  ShowStatus: undefined | {userId: string; photo: string};
 };
 export type IRootTabParamList = {
   Home: undefined;
