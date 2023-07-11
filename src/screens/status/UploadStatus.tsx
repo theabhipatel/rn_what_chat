@@ -123,14 +123,14 @@ const UploadStatus: FC<IPorps> = ({navigation, route}) => {
       </View>
       <View
         style={{
-          height: '70%',
+          height: '80%',
           justifyContent: 'center',
         }}>
         <View>
           {route.params?.data.assets && (
             <Image
               source={{uri: route.params.data.assets[0].uri}}
-              style={{width: '100%', height: 250}}
+              style={{width: '100%', height: '100%', resizeMode: 'contain'}}
             />
           )}
         </View>
