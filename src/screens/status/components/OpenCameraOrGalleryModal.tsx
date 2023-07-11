@@ -14,32 +14,30 @@ import {
   launchImageLibrary,
 } from 'react-native-image-picker';
 import requestCameraPermission from '../../../utils/requestCameraPermission';
+import {NavigationProp, useNavigation} from '@react-navigation/native';
+import {IRootStackParamList} from '../../../types';
 
 interface IProps {
   isModalOpen: boolean;
   setIsModalOpen: Dispatch<SetStateAction<boolean>>;
-  setIsShowImage?: Dispatch<SetStateAction<boolean>>;
   setImageData: Dispatch<SetStateAction<ImagePickerResponse>>;
-  width?: '95%' | '80%';
 }
+type NavigationPropType = NavigationProp<IRootStackParamList>;
 
-const SelectCameraOrGalleryModal: FC<IProps> = ({
+const OpenCameraOrGalleryModal: FC<IProps> = ({
   isModalOpen,
   setIsModalOpen,
-  setIsShowImage,
   setImageData,
-  width,
 }) => {
+  const navigation = useNavigation<NavigationPropType>();
   const takePhotoFromCamera = async () => {
     const granted = await requestCameraPermission();
     if (granted) {
-      const result = await launchCamera({mediaType: 'photo', quality: 0.7});
+      const result = await launchCamera({mediaType: 'mixed', quality: 0.7});
       if (!result.didCancel) {
         setImageData(result);
         setIsModalOpen(false);
-        if (setIsShowImage) {
-          setIsShowImage(true);
-        }
+        navigation.navigate('UploadStatus', {data: result});
       }
     }
   };
@@ -48,16 +46,14 @@ const SelectCameraOrGalleryModal: FC<IProps> = ({
     const granted = await requestCameraPermission();
     if (granted) {
       const result = await launchImageLibrary({
-        mediaType: 'photo',
+        mediaType: 'mixed',
         quality: 0.5,
         selectionLimit: 1,
       });
       if (!result.didCancel) {
         setImageData(result);
         setIsModalOpen(false);
-        if (setIsShowImage) {
-          setIsShowImage(true);
-        }
+        navigation.navigate('UploadStatus', {data: result});
       }
     }
   };
@@ -76,10 +72,10 @@ const SelectCameraOrGalleryModal: FC<IProps> = ({
           <View
             style={{
               position: 'absolute',
-              bottom: 60,
+              bottom: 10,
               left: 8,
-              width: width ? width : '80%',
-              height: 100,
+              width: '95%',
+              height: 150,
               backgroundColor: '#fff',
               borderRadius: 10,
               elevation: 5,
@@ -93,7 +89,9 @@ const SelectCameraOrGalleryModal: FC<IProps> = ({
                   source={require('../../../images/camera-color.png')}
                   style={{height: 45, width: 45}}
                 />
-                <Text style={{color: '#000', marginTop: 5}}> Camera</Text>
+                <Text style={{color: '#000', marginTop: 7, fontSize: 16}}>
+                  Camera
+                </Text>
               </View>
             </TouchableOpacity>
             <TouchableOpacity onPress={takePhotoFromGallery}>
@@ -102,7 +100,9 @@ const SelectCameraOrGalleryModal: FC<IProps> = ({
                   source={require('../../../images/gallery.png')}
                   style={{height: 45, width: 45}}
                 />
-                <Text style={{color: '#000', marginTop: 5}}> Gallery</Text>
+                <Text style={{color: '#000', marginTop: 7, fontSize: 16}}>
+                  Gallery
+                </Text>
               </View>
             </TouchableOpacity>
           </View>
@@ -112,8 +112,6 @@ const SelectCameraOrGalleryModal: FC<IProps> = ({
   );
 };
 
-export default SelectCameraOrGalleryModal;
+export default OpenCameraOrGalleryModal;
 
 const styles = StyleSheet.create({});
-
-//  {"cropRect": {"height": 1856, "width": 1392, "x": 0, "y": 0}, "height": 400, "mime": "image/jpeg", "modificationDate": "1688629234000", "path": "file:///storage/emulated/0/Android/data/com.whatchat/files/Pictures/220b71c5-0365-4b1d-b9d6-55de2ed603e1.jpg", "size": 13724, "width": 300}

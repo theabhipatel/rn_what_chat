@@ -5,17 +5,20 @@ import StatusNotSeen from './components/StatusNotSeen';
 import StatusSeen from './components/StatusSeen';
 import StatusFooter from './components/StatusFooter';
 import SelectCameraOrGalleryModal from '../chat/components/SelectCameraOrGalleryModal';
-import storage from '@react-native-firebase/storage';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {ImagePickerResponse} from 'react-native-image-picker';
+import uploadFile from '../../utils/uploadFile';
+import OpenCameraOrGalleryModal from './components/OpenCameraOrGalleryModal';
 
 const Status = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [imagePath, setImagePath] = useState<string | undefined>('');
+  const [imageData, setImageData] = useState<ImagePickerResponse>({});
   const [userInfo, setUserInfo] = useState({
     email: '',
     photo: '',
+    userId: '',
   });
-  const [imageUrl, setImageUrl] = useState<string>();
+  console.log('------ imageData --------->>', imageData);
 
   useEffect(() => {
     getUserInfo();
@@ -24,21 +27,11 @@ const Status = () => {
   const getUserInfo = useCallback(async () => {
     const email = await AsyncStorage.getItem('USER_EMAIL');
     const photo = await AsyncStorage.getItem('USER_PHOTO');
-    console.log('----- photo - ------>', photo);
+    const userId = await AsyncStorage.getItem('USER_ID');
+    // console.log('----- photo - ------>', photo);
 
-    if (email && photo) {
-      setUserInfo({email, photo});
-    }
-  }, []);
-
-  const uploadImage = useCallback(async () => {
-    if (imagePath) {
-      const newFileName = Date.now().toString();
-      const reference = storage().ref(newFileName);
-      const pathToFile = imagePath;
-      await reference.putFile(pathToFile);
-      let imageUrl = await storage().ref(newFileName).getDownloadURL();
-      setImageUrl(imageUrl);
+    if (email && photo && userId) {
+      setUserInfo({email, photo, userId});
     }
   }, []);
 
@@ -76,11 +69,10 @@ const Status = () => {
           )}
         />
       </View>
-      <SelectCameraOrGalleryModal
+      <OpenCameraOrGalleryModal
         isModalOpen={isModalOpen}
         setIsModalOpen={setIsModalOpen}
-        setImagePath={setImagePath}
-        width="95%"
+        setImageData={setImageData}
       />
     </View>
   );

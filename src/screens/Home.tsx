@@ -7,7 +7,7 @@ import {
   View,
 } from 'react-native';
 import React, {FC, useEffect, useState} from 'react';
-import ChatBox from '../components/ChatBox';
+import ChatBox from './chat/components/ChatBox';
 import firestore from '@react-native-firebase/firestore';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';

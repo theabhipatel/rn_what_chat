@@ -1,5 +1,5 @@
 import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-import React, {Dispatch, FC, SetStateAction} from 'react';
+import React, {Dispatch, FC, SetStateAction, memo} from 'react';
 
 interface IProps {
   photo: string;
@@ -7,7 +7,7 @@ interface IProps {
 }
 
 const StatusHeader: FC<IProps> = ({setIsModalOpen, photo}) => {
-  console.log('----- photo - ------>', photo);
+  // console.log('----- photo - ------>', photo);
 
   return (
     <TouchableOpacity onPress={() => setIsModalOpen(true)}>
@@ -67,6 +67,6 @@ const StatusHeader: FC<IProps> = ({setIsModalOpen, photo}) => {
   );
 };
 
-export default StatusHeader;
+export default memo(StatusHeader);
 
 const styles = StyleSheet.create({});
