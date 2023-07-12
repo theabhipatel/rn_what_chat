@@ -64,14 +64,19 @@ const ShowStatus: FC<IProps> = ({navigation, route}) => {
 
   return (
     <View style={{flex: 1, backgroundColor: '#000'}}>
-      <StatusBar backgroundColor={'#000'} />
+      <StatusBar hidden />
       {/* ---------> Header <------------  */}
-      {/* <View
+      <View
         style={{
+          position: 'absolute',
+          top: 20,
+          width: '100%',
+          zIndex: 1,
           padding: 10,
           flexDirection: 'row',
           alignItems: 'center',
           justifyContent: 'space-between',
+          backgroundColor: 'rgba(0,0,0,0.3)',
         }}>
         <View style={{flexDirection: 'row', alignItems: 'center'}}>
           <TouchableOpacity onPress={() => navigation.goBack()}>
@@ -109,7 +114,7 @@ const ShowStatus: FC<IProps> = ({navigation, route}) => {
             style={{width: 22, height: 22, tintColor: '#fff'}}
           />
         </View>
-      </View> */}
+      </View>
       {/* ---------> Showing Status here <------------  */}
       <View style={{width, height}}>
         {statusData[current]?.mediaLink && (
@@ -138,6 +143,20 @@ const ShowStatus: FC<IProps> = ({navigation, route}) => {
               width: '40%',
               height: '100%',
             }}></TouchableOpacity>
+        </View>
+        <View
+          style={{
+            position: 'absolute',
+            bottom: 0,
+            width: '100%',
+            height: 100,
+            backgroundColor: 'rgba(0,0,0,0.6)',
+            alignItems: 'center',
+            padding: 5,
+          }}>
+          <Text style={{color: '#fff', fontSize: 18, textAlign: 'center'}}>
+            {statusData[current]?.caption}
+          </Text>
         </View>
       </View>
     </View>

@@ -72,13 +72,18 @@ const UploadStatus: FC<IPorps> = ({navigation, route}) => {
 
   return (
     <View style={{flex: 1, backgroundColor: '#000'}}>
-      <StatusBar backgroundColor={'#000'} barStyle={'dark-content'} />
+      <StatusBar hidden />
       <View
         style={{
           padding: 16,
           flexDirection: 'row',
           justifyContent: 'space-between',
           alignItems: 'center',
+          position: 'absolute',
+          top: 20,
+          width: '100%',
+          zIndex: 1,
+          backgroundColor: 'rgba(0,0,0,0.4)',
         }}>
         <View>
           <TouchableOpacity onPress={() => navigation.goBack()}>
@@ -123,8 +128,8 @@ const UploadStatus: FC<IPorps> = ({navigation, route}) => {
       </View>
       <View
         style={{
-          height: '80%',
-          justifyContent: 'center',
+          height: '100%',
+          width: '100%',
         }}>
         <View>
           {route.params?.data.assets && (
@@ -135,6 +140,7 @@ const UploadStatus: FC<IPorps> = ({navigation, route}) => {
           )}
         </View>
       </View>
+      {/* -------------->> bottom view <<-------------- */}
       <View style={{position: 'absolute', width: '100%', bottom: 10}}>
         <View
           style={{
@@ -160,11 +166,13 @@ const UploadStatus: FC<IPorps> = ({navigation, route}) => {
 
         <View
           style={{
-            marginTop: 16,
+            marginTop: 8,
+            paddingTop: 10,
             flexDirection: 'row',
             justifyContent: 'space-between',
             alignItems: 'center',
-            marginHorizontal: 8,
+            paddingHorizontal: 8,
+            backgroundColor: 'rgba(0,0,0,0.5)',
           }}>
           <View
             style={{
