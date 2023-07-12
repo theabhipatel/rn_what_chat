@@ -20,7 +20,7 @@ import Profile from './screens/Profile';
 import Chat from './screens/chat/Chat';
 import TopMenuModal from './components/TopMenuModal';
 import UploadStatus from './screens/status/UploadStatus';
-import ShowStatus from './screens/showStatus/ShowStatus';
+import ShowStatus from './screens/status/ShowStatus';
 
 const Stack = createNativeStackNavigator<IRootStackParamList>();
 
