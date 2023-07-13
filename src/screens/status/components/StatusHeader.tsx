@@ -1,7 +1,15 @@
 import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-import React, {Dispatch, FC, SetStateAction, memo} from 'react';
+import React, {
+  Dispatch,
+  FC,
+  SetStateAction,
+  memo,
+  useEffect,
+  useState,
+} from 'react';
 import {NavigationProp, useNavigation} from '@react-navigation/native';
 import {IRootStackParamList} from '../../../types';
+import firestore from '@react-native-firebase/firestore';
 
 interface IProps {
   photo: string;
@@ -13,7 +21,30 @@ type NavigationPropType = NavigationProp<IRootStackParamList>;
 
 const StatusHeader: FC<IProps> = ({setIsModalOpen, photo, userId}) => {
   const navigation = useNavigation<NavigationPropType>();
-  const isStatus = true;
+  const [isStatus, setIsStatus] = useState(false);
+
+  useEffect(() => {
+    getStatusData();
+  }, []);
+
+  const getStatusData = () => {
+    const statusRef = firestore()
+      .collection('status')
+      .doc(userId)
+      .collection('ones-status')
+      .orderBy('createdAt', 'desc');
+
+    statusRef
+      .get()
+      .then(res => {
+        console.log('--- res.empty ---> ', res.empty);
+        console.log('--- res.length ', res.docs.length);
+        setIsStatus(!res.empty);
+      })
+      .catch(error => {
+        console.log(error);
+      });
+  };
 
   const handleClickOnHeader = () => {
     if (isStatus) {

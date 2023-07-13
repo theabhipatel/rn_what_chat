@@ -57,6 +57,7 @@ const UploadStatus: FC<IPorps> = ({navigation, route}) => {
           createdAt: Date.now(),
           mediaLink: imageUrl,
           contentType: assets[0].type,
+          isFinished: 0,
         })
         .then(res => {
           console.log('----- res ---', res);

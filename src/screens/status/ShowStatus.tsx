@@ -5,13 +5,16 @@ import {
   Text,
   TouchableOpacity,
   View,
+  Animated,
   useWindowDimensions,
 } from 'react-native';
-import React, {FC, useCallback, useEffect, useState} from 'react';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import React, {FC, useCallback, useEffect, useRef, useState} from 'react';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {IRootStackParamList} from '../../types';
 import firestore from '@react-native-firebase/firestore';
+import Loader from '../../components/Loader';
+import Video from 'react-native-video';
+// import Animated from 'react-native-reanimated';
 
 type IProps = NativeStackScreenProps<IRootStackParamList, 'ShowStatus'>;
 interface IStatusData {
@@ -19,29 +22,33 @@ interface IStatusData {
   contentType: string;
   createdAt: number;
   mediaLink: string;
+  isFinished: number;
 }
 
 const ShowStatus: FC<IProps> = ({navigation, route}) => {
   const [statusData, setStatusData] = useState<IStatusData[]>([]);
   const [current, setCurrent] = useState(0);
+  const [isVideoLoad, setIsVideoLoad] = useState(false);
+  const [videoLenth, setVideoLength] = useState(0);
   const {width, height} = useWindowDimensions();
-
-  console.log('--------  current --------', current);
 
   useEffect(() => {
     getStatusData();
   }, []);
 
   const getStatusData = () => {
-    const chatRef = firestore()
+    const statusRef = firestore()
       .collection('status')
       .doc(route.params?.userId)
       .collection('ones-status')
       .orderBy('createdAt', 'desc');
 
-    chatRef
+    statusRef
       .get()
       .then(res => {
+        // console.log('--- res.empty ------> ', res.empty);
+        // console.log('--- res.docs ', res.docs.length);
+
         const data = res.docs.map(doc => doc.data() as IStatusData);
         setStatusData(data);
       })
@@ -50,16 +57,60 @@ const ShowStatus: FC<IProps> = ({navigation, route}) => {
       });
   };
 
-  const handlePrevStatus = () => {
-    current > 0 ? setCurrent(prev => prev - 1) : setCurrent(0);
+  /** ---------> logic for top status progress bar <------- */
+  const progress = useRef(new Animated.Value(0)).current;
+  // console.log('----- statusData[current] ---', statusData[current]);
+
+  const startAnimation = (length?: any) => {
+    if (statusData[current].contentType.includes('video')) {
+      if (isVideoLoad) {
+        Animated.timing(progress, {
+          toValue: 1,
+          duration: 6000,
+          useNativeDriver: false,
+        }).start(({finished}) => {
+          if (finished) {
+            handleNextStatus();
+          }
+        });
+      }
+    } else {
+      Animated.timing(progress, {
+        toValue: 1,
+        duration: 5000,
+        useNativeDriver: false,
+      }).start(({finished}) => {
+        if (finished) {
+          handleNextStatus();
+        }
+      });
+    }
   };
+
   const handleNextStatus = () => {
     if (current !== statusData.length - 1) {
+      let tempData = statusData;
+      tempData[current].isFinished = 1;
+      setStatusData(tempData);
+      progress.setValue(0);
       setCurrent(prev => prev + 1);
+    } else {
+      progress.setValue(0);
+      navigation.goBack();
     }
-    // else {
-    //   setCurrent(statusData.length);
-    // }
+  };
+
+  const handlePrevStatus = () => {
+    if (current > 0) {
+      let tempData = statusData;
+      tempData[current - 1].isFinished = 0;
+      setStatusData(tempData);
+      progress.setValue(0);
+      setCurrent(prev => prev - 1);
+    } else {
+      setCurrent(0);
+      progress.setValue(0);
+    }
   };
 
   return (
@@ -69,59 +120,117 @@ const ShowStatus: FC<IProps> = ({navigation, route}) => {
       <View
         style={{
           position: 'absolute',
-          top: 20,
+          paddingTop: 30,
           width: '100%',
           zIndex: 1,
-          padding: 10,
-          flexDirection: 'row',
-          alignItems: 'center',
-          justifyContent: 'space-between',
+          paddingVertical: 10,
           backgroundColor: 'rgba(0,0,0,0.3)',
         }}>
         <View style={{flexDirection: 'row', alignItems: 'center'}}>
-          <TouchableOpacity onPress={() => navigation.goBack()}>
-            <Image
-              source={require('../../images/back.png')}
-              style={{width: 20, height: 20, tintColor: '#fff'}}
-            />
-          </TouchableOpacity>
-          <View
-            style={{
-              borderWidth: 1,
-              borderColor: '#fff',
-              borderRadius: 20,
-              marginLeft: 10,
-            }}>
-            {route.params?.photo && (
-              <Image
-                source={{uri: route.params.photo}}
-                style={{width: 35, height: 35, borderRadius: 20}}
-              />
-            )}
-          </View>
-          <View style={{marginLeft: 16}}>
-            <Text style={{color: '#fff', fontSize: 16, fontWeight: '500'}}>
-              My Status
-            </Text>
-            <Text style={{color: '#fff', fontSize: 10, fontWeight: '500'}}>
-              Today, 3:45 pm
-            </Text>
-          </View>
+          {statusData.map((item, index) => (
+            <View
+              key={index}
+              style={{
+                flex: 1,
+                height: 2,
+                backgroundColor: '#aaa',
+                margin: 2.5,
+                flexDirection: 'row',
+              }}>
+              <Animated.View
+                style={{
+                  flex:
+                    current === index ? progress : statusData[index].isFinished,
+                  height: 2.5,
+                  backgroundColor: '#fff',
+                }}></Animated.View>
+            </View>
+          ))}
         </View>
-        <View>
-          <Image
-            source={require('../../images/dots.png')}
-            style={{width: 22, height: 22, tintColor: '#fff'}}
-          />
+        <View
+          style={{
+            flexDirection: 'row',
+            width: '100%',
+            marginTop: 8,
+            paddingHorizontal: 10,
+            alignItems: 'center',
+            justifyContent: 'space-between',
+          }}>
+          <View style={{flexDirection: 'row', alignItems: 'center'}}>
+            <TouchableOpacity onPress={() => navigation.goBack()}>
+              <Image
+                source={require('../../images/back.png')}
+                style={{width: 20, height: 20, tintColor: '#fff'}}
+              />
+            </TouchableOpacity>
+            <View
+              style={{
+                borderWidth: 1,
+                borderColor: '#fff',
+                borderRadius: 20,
+                marginLeft: 10,
+              }}>
+              {route.params?.photo && (
+                <Image
+                  source={{uri: route.params.photo}}
+                  style={{width: 35, height: 35, borderRadius: 20}}
+                />
+              )}
+            </View>
+            <View style={{marginLeft: 16}}>
+              <Text style={{color: '#fff', fontSize: 16, fontWeight: '500'}}>
+                My Status
+              </Text>
+              <Text style={{color: '#fff', fontSize: 10, fontWeight: '500'}}>
+                Today, 3:45 pm
+              </Text>
+            </View>
+          </View>
+          <View>
+            <Image
+              source={require('../../images/dots.png')}
+              style={{width: 22, height: 22, tintColor: '#fff'}}
+            />
+          </View>
         </View>
       </View>
       {/* ---------> Showing Status here <------------  */}
       <View style={{width, height}}>
-        {statusData[current]?.mediaLink && (
+        {/* {statusData[current]?.mediaLink && (
           <Image
+            onLoadEnd={() => {
+              progress.setValue(0);
+              startAnimation();
+            }}
             source={{uri: statusData[current].mediaLink}}
             style={{height, width, resizeMode: 'contain'}}
           />
+        )} */}
+        {statusData[current]?.mediaLink ? (
+          statusData[current].contentType.includes('image/') ? (
+            <Image
+              onLoadEnd={() => {
+                progress.setValue(0);
+                startAnimation();
+              }}
+              source={{uri: statusData[current].mediaLink}}
+              style={{height, width, resizeMode: 'contain'}}
+            />
+          ) : (
+            <Video
+              source={{uri: statusData[current].mediaLink}}
+              paused={false}
+              onReadyForDisplay={() => startAnimation(videoLenth)}
+              onLoad={() => {
+                setIsVideoLoad(true);
+                startAnimation();
+              }}
+              resizeMode="contain"
+              style={{height, width}}
+            />
+          )
+        ) : (
+          <Loader isLoading />
         )}
         <View
           style={{
