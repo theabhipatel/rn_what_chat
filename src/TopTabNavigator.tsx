@@ -20,7 +20,7 @@ const TopTabNavigator = () => {
           tabBarActiveTintColor: '#fff',
 
           tabBarIndicatorStyle: {
-            backgroundColor: '#ffff',
+            backgroundColor: '#fff',
           },
           tabBarLabelStyle: {
             fontWeight: 'bold',

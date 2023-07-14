@@ -85,15 +85,15 @@ const Status = () => {
           <View
             style={{
               position: 'absolute',
-              bottom: 16,
-              right: 10,
+              bottom: 20,
+              right: 18,
               padding: 10,
               backgroundColor: '#128C7E',
-              borderRadius: 20,
+              borderRadius: 30,
             }}>
             <Image
               source={require('../../images/camera.png')}
-              style={{width: 20, height: 20, tintColor: '#fff'}}
+              style={{width: 30, height: 30, tintColor: '#fff'}}
             />
           </View>
         </TouchableOpacity>

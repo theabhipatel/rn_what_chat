@@ -5,6 +5,7 @@ import {
   StatusBar,
   TextInput,
   TouchableOpacity,
+  useWindowDimensions,
 } from 'react-native';
 import React, {FC, useCallback, useEffect, useState} from 'react';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
@@ -25,6 +26,7 @@ const UploadStatus: FC<IPorps> = ({navigation, route}) => {
     photo: '',
     userId: '',
   });
+  const {width, height} = useWindowDimensions();
 
   useEffect(() => {
     getUserInfo();
@@ -73,24 +75,31 @@ const UploadStatus: FC<IPorps> = ({navigation, route}) => {
 
   return (
     <View style={{flex: 1, backgroundColor: '#000'}}>
-      <StatusBar hidden />
+      <StatusBar hidden showHideTransition={'slide'} backgroundColor={'red'} />
       <View
         style={{
           padding: 16,
+          paddingTop: 20,
           flexDirection: 'row',
           justifyContent: 'space-between',
           alignItems: 'center',
           position: 'absolute',
-          top: 20,
+          top: 0,
           width: '100%',
           zIndex: 1,
           backgroundColor: 'rgba(0,0,0,0.4)',
         }}>
         <View>
-          <TouchableOpacity onPress={() => navigation.goBack()}>
+          <TouchableOpacity
+            onPress={() => navigation.goBack()}
+            style={{padding: 10}}>
             <Image
               source={require('../../images/close.png')}
-              style={{width: 14, height: 14, tintColor: '#fff'}}
+              style={{
+                width: 18,
+                height: 18,
+                tintColor: '#fff',
+              }}
             />
           </TouchableOpacity>
         </View>
@@ -129,8 +138,8 @@ const UploadStatus: FC<IPorps> = ({navigation, route}) => {
       </View>
       <View
         style={{
-          height: '100%',
-          width: '100%',
+          height: height,
+          width: width,
         }}>
         <View>
           {route.params?.data.assets && (
@@ -148,10 +157,11 @@ const UploadStatus: FC<IPorps> = ({navigation, route}) => {
             height: 42,
             backgroundColor: '#192734',
             borderRadius: 30,
-            marginHorizontal: 8,
+            marginHorizontal: 12,
             flexDirection: 'row',
             alignItems: 'center',
             paddingHorizontal: 10,
+            paddingRight: 30,
           }}>
           <Image
             source={require('../../images/image.png')}
@@ -161,7 +171,11 @@ const UploadStatus: FC<IPorps> = ({navigation, route}) => {
             placeholder="Add a caption..."
             onChangeText={txt => setCaption(txt)}
             placeholderTextColor={'#fff'}
-            style={{marginLeft: 8, fontSize: 15, color: '#fff'}}
+            style={{
+              paddingHorizontal: 8,
+              fontSize: 15,
+              color: '#fff',
+            }}
           />
         </View>
 
@@ -172,7 +186,7 @@ const UploadStatus: FC<IPorps> = ({navigation, route}) => {
             flexDirection: 'row',
             justifyContent: 'space-between',
             alignItems: 'center',
-            paddingHorizontal: 8,
+            paddingHorizontal: 12,
             backgroundColor: 'rgba(0,0,0,0.5)',
           }}>
           <View
@@ -198,10 +212,12 @@ const UploadStatus: FC<IPorps> = ({navigation, route}) => {
                 padding: 12,
                 backgroundColor: '#128C7E',
                 borderRadius: 30,
+                justifyContent: 'center',
+                alignItems: 'center',
               }}>
               <Image
                 source={require('../../images/send.png')}
-                style={{width: 18, height: 18, tintColor: '#fff'}}
+                style={{width: 20, height: 20, tintColor: '#fff'}}
               />
             </View>
           </TouchableOpacity>
