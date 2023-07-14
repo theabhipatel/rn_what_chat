@@ -17,7 +17,7 @@ import Video from 'react-native-video';
 // import Animated from 'react-native-reanimated';
 
 type IProps = NativeStackScreenProps<IRootStackParamList, 'ShowStatus'>;
-interface IStatusData {
+export interface IStatusData {
   caption: string;
   contentType: string;
   createdAt: number;
@@ -46,9 +46,6 @@ const ShowStatus: FC<IProps> = ({navigation, route}) => {
     statusRef
       .get()
       .then(res => {
-        // console.log('--- res.empty ------> ', res.empty);
-        // console.log('--- res.docs ', res.docs.length);
-
         const data = res.docs.map(doc => doc.data() as IStatusData);
         setStatusData(data);
       })

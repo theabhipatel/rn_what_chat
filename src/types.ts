@@ -1,4 +1,5 @@
 import {ImagePickerResponse} from 'react-native-image-picker';
+import {IStatusData} from './screens/status/ShowStatus';
 
 export type IRootStackParamList = {
   Splash: undefined;
@@ -10,8 +11,10 @@ export type IRootStackParamList = {
   Tabs: undefined;
   Profile: undefined;
   UploadStatus: {data: ImagePickerResponse};
-  ShowStatus: undefined | {userId: string; photo: string};
-  MyStatus: undefined;
+  ShowStatus: {userId: string | undefined; photo: string | undefined};
+  MyStatus:
+    | undefined
+    | {statusData: IStatusData[]; userId: string; photo: string};
 };
 
 export type IRootTabParamList = {

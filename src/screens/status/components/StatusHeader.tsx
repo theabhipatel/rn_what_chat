@@ -10,6 +10,7 @@ import React, {
 import {NavigationProp, useNavigation} from '@react-navigation/native';
 import {IRootStackParamList} from '../../../types';
 import firestore from '@react-native-firebase/firestore';
+import {IStatusData} from '../ShowStatus';
 
 interface IProps {
   photo: string;
@@ -22,6 +23,7 @@ type NavigationPropType = NavigationProp<IRootStackParamList>;
 const StatusHeader: FC<IProps> = ({setIsModalOpen, photo, userId}) => {
   const navigation = useNavigation<NavigationPropType>();
   const [isStatus, setIsStatus] = useState(false);
+  const [statusData, setStatusData] = useState<IStatusData[]>([]);
 
   useEffect(() => {
     getStatusData();
@@ -37,21 +39,27 @@ const StatusHeader: FC<IProps> = ({setIsModalOpen, photo, userId}) => {
     statusRef
       .get()
       .then(res => {
-        console.log('--- res.empty ---> ', res.empty);
-        console.log('--- res.length ', res.docs.length);
         setIsStatus(!res.empty);
+        if (!res.empty) {
+          const data = res.docs.map(doc => doc.data() as IStatusData);
+          setStatusData(data);
+        }
       })
       .catch(error => {
         console.log(error);
       });
   };
 
-  const handleClickOnHeader = () => {
+  const handlePressOnHeader = () => {
     if (isStatus) {
       navigation.navigate('ShowStatus', {userId, photo});
     } else {
       setIsModalOpen(true);
     }
+  };
+
+  const handleMorePress = () => {
+    navigation.navigate('MyStatus', {statusData, userId, photo});
   };
 
   return (
@@ -62,7 +70,7 @@ const StatusHeader: FC<IProps> = ({setIsModalOpen, photo, userId}) => {
           alignItems: 'center',
           justifyContent: 'space-between',
         }}>
-        <TouchableOpacity onPress={handleClickOnHeader}>
+        <TouchableOpacity onPress={handlePressOnHeader}>
           <View
             style={{
               flexDirection: 'row',
@@ -144,7 +152,7 @@ const StatusHeader: FC<IProps> = ({setIsModalOpen, photo, userId}) => {
         </TouchableOpacity>
         <View>
           {isStatus && (
-            <TouchableOpacity onPress={() => navigation.navigate('MyStatus')}>
+            <TouchableOpacity onPress={handleMorePress}>
               <Image
                 source={require('../../../images/dots-hori.png')}
                 style={{width: 20, height: 20}}
