@@ -24,6 +24,7 @@ const StatusHeader: FC<IProps> = ({setIsModalOpen, photo, userId}) => {
   const navigation = useNavigation<NavigationPropType>();
   const [isStatus, setIsStatus] = useState(false);
   const [statusData, setStatusData] = useState<IStatusData[]>([]);
+  console.log('------ status data in header --->', statusData);
 
   useEffect(() => {
     getStatusData();
@@ -32,13 +33,13 @@ const StatusHeader: FC<IProps> = ({setIsModalOpen, photo, userId}) => {
   const getStatusData = () => {
     const statusRef = firestore()
       .collection('status')
-      .doc(userId)
-      .collection('ones-status')
-      .orderBy('createdAt', 'desc');
+      .where('userId', '==', userId);
 
     statusRef
       .get()
       .then(res => {
+        console.log('----- res ----->', res);
+
         setIsStatus(!res.empty);
         if (!res.empty) {
           const data = res.docs.map(doc => doc.data() as IStatusData);

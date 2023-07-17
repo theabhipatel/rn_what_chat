@@ -18,6 +18,8 @@ import Video from 'react-native-video';
 
 type IProps = NativeStackScreenProps<IRootStackParamList, 'ShowStatus'>;
 export interface IStatusData {
+  userId: string;
+  userName: string;
   caption: string;
   contentType: string;
   createdAt: number;
@@ -39,15 +41,14 @@ const ShowStatus: FC<IProps> = ({navigation, route}) => {
   const getStatusData = () => {
     const statusRef = firestore()
       .collection('status')
-      .doc(route.params?.userId)
-      .collection('ones-status')
-      .orderBy('createdAt', 'desc');
+      .where('userId', '==', route.params?.userId);
 
     statusRef
       .get()
       .then(res => {
         const data = res.docs.map(doc => doc.data() as IStatusData);
-        setStatusData(data);
+        const sortedData = data.sort((a, b) => a.createdAt - b.createdAt);
+        setStatusData(sortedData);
       })
       .catch(error => {
         console.log(error);

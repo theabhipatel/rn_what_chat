@@ -14,6 +14,7 @@ import uploadFile from '../../utils/uploadFile';
 import firestore from '@react-native-firebase/firestore';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Loader from '../../components/Loader';
+import uuid from 'react-native-uuid';
 
 type IPorps = NativeStackScreenProps<IRootStackParamList, 'UploadStatus'>;
 
@@ -25,6 +26,7 @@ const UploadStatus: FC<IPorps> = ({navigation, route}) => {
     email: '',
     photo: '',
     userId: '',
+    userName: '',
   });
   const {width, height} = useWindowDimensions();
 
@@ -35,11 +37,12 @@ const UploadStatus: FC<IPorps> = ({navigation, route}) => {
   const getUserInfo = useCallback(async () => {
     const email = await AsyncStorage.getItem('USER_EMAIL');
     const photo = await AsyncStorage.getItem('USER_PHOTO');
+    const userName = await AsyncStorage.getItem('USER_NAME');
     const userId = await AsyncStorage.getItem('USER_ID');
     // console.log('----- photo - ------>', photo);
 
-    if (email && photo && userId) {
-      setUserInfo({email, photo, userId});
+    if (email && photo && userId && userName) {
+      setUserInfo({email, photo, userId, userName});
     }
   }, []);
 
@@ -50,16 +53,20 @@ const UploadStatus: FC<IPorps> = ({navigation, route}) => {
       if (assets[0].fileName && assets[0].uri) {
         imageUrl = await uploadFile(assets[0].fileName, assets[0].uri);
       }
+      const statusId = uuid.v4().toString();
       firestore()
         .collection('status')
-        .doc('' + userInfo.userId)
-        .collection('ones-status')
-        .add({
+        .doc(statusId)
+        .set({
+          statusId,
+          userId: userInfo.userId,
+          userName: userInfo.userName,
           caption,
           createdAt: Date.now(),
           mediaLink: imageUrl,
           contentType: assets[0].type,
           isFinished: 0,
+          isSeen: false,
         })
         .then(res => {
           console.log('----- res ---', res);

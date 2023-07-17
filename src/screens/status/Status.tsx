@@ -16,6 +16,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {ImagePickerResponse} from 'react-native-image-picker';
 import uploadFile from '../../utils/uploadFile';
 import OpenCameraOrGalleryModal from './components/OpenCameraOrGalleryModal';
+import {IStatusData} from './ShowStatus';
+import firestore from '@react-native-firebase/firestore';
 
 export interface IUserInfo {
   email: string;
@@ -31,6 +33,7 @@ const Status = () => {
     photo: '',
     userId: '',
   });
+  const [statusData, setStatusData] = useState<IStatusData[]>([]);
 
   useEffect(() => {
     getUserInfo();
@@ -47,11 +50,37 @@ const Status = () => {
     }
   }, []);
 
+  /** fetching status data here -----> */
+  // console.log('------ status data --->', statusData);
+  useEffect(() => {
+    // getStatusData();
+  }, []);
+
+  const getStatusData = () => {
+    const statusRef = firestore()
+      .collection('status')
+      .doc()
+      .collection('ones-status')
+      .orderBy('createdAt', 'desc');
+
+    statusRef
+      .get()
+      .then(res => {
+        if (!res.empty) {
+          const data = res.docs.map(doc => doc.data() as IStatusData);
+          setStatusData(data);
+        }
+      })
+      .catch(error => {
+        console.log(error);
+      });
+  };
+
   return (
     <View style={{flex: 1}}>
       <View>
         <FlatList
-          data={[1, 1, 1, 1, 1, 1, 1]}
+          data={statusData}
           style={{paddingHorizontal: 15}}
           ListHeaderComponent={() => (
             <StatusHeader
@@ -61,7 +90,7 @@ const Status = () => {
             />
           )}
           ItemSeparatorComponent={() => <View style={{marginVertical: 8}} />}
-          renderItem={() => <StatusNotSeen />}
+          renderItem={({item}) => <StatusNotSeen item={item} />}
           ListFooterComponent={() => (
             <View>
               <View style={{marginVertical: 10}}>

@@ -6105,7 +6105,7 @@ react-native-video@^5.2.1:
     prop-types "^15.7.2"
     shaka-player "^2.5.9"
 
-react-native@*, "react-native@^0.0.0-0 || 0.60 - 0.72 || 1000.0.0", react-native@>=0.42.0, react-native@>=0.61.0, react-native@>=0.63.3, react-native@0.72.0:
+react-native@*, "react-native@^0.0.0-0 || 0.60 - 0.72 || 1000.0.0", react-native@>=0.42.0, react-native@>=0.57.0, react-native@>=0.61.0, react-native@>=0.63.3, react-native@0.72.0:
   version "0.72.0"
   resolved "https://registry.npmjs.org/react-native/-/react-native-0.72.0.tgz"
   integrity sha512-BP2qq5f05pl3zV+eYgW7nmjCV+3zLXs/Vm69xMTCLD34U2bvRhuWbuUhqpauw7fyk5c8+LrY9NKcnARCkqKXcw==

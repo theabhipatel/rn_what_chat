@@ -1,7 +1,12 @@
 import {StyleSheet, Text, View} from 'react-native';
-import React from 'react';
+import React, {FC, useEffect, useState} from 'react';
+import {IStatusData} from '../ShowStatus';
 
-const StatusNotSeen = () => {
+interface IProps {
+  item: IStatusData;
+}
+
+const StatusNotSeen: FC<IProps> = ({item}) => {
   return (
     <View>
       <View style={{flexDirection: 'row', alignItems: 'center'}}>
@@ -26,7 +31,7 @@ const StatusNotSeen = () => {
         </View>
         <View style={{marginLeft: 15}}>
           <Text style={{fontSize: 16, color: '#000', fontWeight: '500'}}>
-            Game ji
+            {item.userName}
           </Text>
           <Text style={{fontSize: 12, color: '#aaa'}}>43 minutes ago</Text>
         </View>
