@@ -61,6 +61,7 @@ const UploadStatus: FC<IPorps> = ({navigation, route}) => {
           statusId,
           userId: userInfo.userId,
           userName: userInfo.userName,
+          userPhoto: userInfo.photo,
           caption,
           createdAt: Date.now(),
           mediaLink: imageUrl,
@@ -82,11 +83,12 @@ const UploadStatus: FC<IPorps> = ({navigation, route}) => {
 
   return (
     <View style={{flex: 1, backgroundColor: '#000'}}>
-      <StatusBar hidden showHideTransition={'slide'} backgroundColor={'red'} />
+      <StatusBar backgroundColor={'#000'} barStyle={'dark-content'} />
       <View
         style={{
           padding: 16,
-          paddingTop: 20,
+          paddingTop: 5,
+          paddingBottom: 5,
           flexDirection: 'row',
           justifyContent: 'space-between',
           alignItems: 'center',

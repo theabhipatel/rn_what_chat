@@ -14,12 +14,14 @@ import {IRootStackParamList} from '../../types';
 import firestore from '@react-native-firebase/firestore';
 import Loader from '../../components/Loader';
 import Video from 'react-native-video';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 // import Animated from 'react-native-reanimated';
 
 type IProps = NativeStackScreenProps<IRootStackParamList, 'ShowStatus'>;
 export interface IStatusData {
   userId: string;
   userName: string;
+  userPhoto: string;
   caption: string;
   contentType: string;
   createdAt: number;
@@ -33,9 +35,18 @@ const ShowStatus: FC<IProps> = ({navigation, route}) => {
   const [isVideoLoad, setIsVideoLoad] = useState(false);
   const [videoLenth, setVideoLength] = useState(0);
   const {width, height} = useWindowDimensions();
+  const [currentUserId, setCurrentUserId] = useState<string>();
 
   useEffect(() => {
+    getUserCurrentUserId();
     getStatusData();
+  }, []);
+
+  const getUserCurrentUserId = useCallback(async () => {
+    const userId = await AsyncStorage.getItem('USER_ID');
+    if (userId) {
+      setCurrentUserId(userId);
+    }
   }, []);
 
   const getStatusData = () => {
@@ -113,12 +124,12 @@ const ShowStatus: FC<IProps> = ({navigation, route}) => {
 
   return (
     <View style={{flex: 1, backgroundColor: '#000'}}>
-      <StatusBar hidden />
+      <StatusBar backgroundColor={'#000'} barStyle={'dark-content'} />
       {/* ---------> Header <------------  */}
       <View
         style={{
           position: 'absolute',
-          paddingTop: 30,
+          paddingTop: 5,
           width: '100%',
           zIndex: 1,
           paddingVertical: 10,
@@ -140,7 +151,7 @@ const ShowStatus: FC<IProps> = ({navigation, route}) => {
                   flex:
                     current === index ? progress : statusData[index].isFinished,
                   height: 2.5,
-                  backgroundColor: '#fff',
+                  backgroundColor: '#128C7E',
                 }}></Animated.View>
             </View>
           ))}
@@ -177,8 +188,11 @@ const ShowStatus: FC<IProps> = ({navigation, route}) => {
             </View>
             <View style={{marginLeft: 16}}>
               <Text style={{color: '#fff', fontSize: 16, fontWeight: '500'}}>
-                My Status
+                {currentUserId == route.params.userId
+                  ? 'My Status'
+                  : route.params.userName}
               </Text>
+
               <Text style={{color: '#fff', fontSize: 10, fontWeight: '500'}}>
                 Today, 3:45 pm
               </Text>

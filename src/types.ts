@@ -11,7 +11,11 @@ export type IRootStackParamList = {
   Tabs: undefined;
   Profile: undefined;
   UploadStatus: {data: ImagePickerResponse};
-  ShowStatus: {userId: string | undefined; photo: string | undefined};
+  ShowStatus: {
+    userId: string | undefined;
+    photo: string | undefined;
+    userName: string;
+  };
   MyStatus:
     | undefined
     | {statusData: IStatusData[]; userId: string; photo: string};

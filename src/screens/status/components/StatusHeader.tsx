@@ -15,16 +15,22 @@ import {IStatusData} from '../ShowStatus';
 interface IProps {
   photo: string;
   userId: string;
+  userName: string;
   setIsModalOpen: Dispatch<SetStateAction<boolean>>;
 }
 
 type NavigationPropType = NavigationProp<IRootStackParamList>;
 
-const StatusHeader: FC<IProps> = ({setIsModalOpen, photo, userId}) => {
+const StatusHeader: FC<IProps> = ({
+  setIsModalOpen,
+  photo,
+  userId,
+  userName,
+}) => {
   const navigation = useNavigation<NavigationPropType>();
   const [isStatus, setIsStatus] = useState(false);
   const [statusData, setStatusData] = useState<IStatusData[]>([]);
-  console.log('------ status data in header --->', statusData);
+  // console.log('------ status data in header --->', statusData);
 
   useEffect(() => {
     getStatusData();
@@ -38,8 +44,6 @@ const StatusHeader: FC<IProps> = ({setIsModalOpen, photo, userId}) => {
     statusRef
       .get()
       .then(res => {
-        console.log('----- res ----->', res);
-
         setIsStatus(!res.empty);
         if (!res.empty) {
           const data = res.docs.map(doc => doc.data() as IStatusData);
@@ -53,7 +57,7 @@ const StatusHeader: FC<IProps> = ({setIsModalOpen, photo, userId}) => {
 
   const handlePressOnHeader = () => {
     if (isStatus) {
-      navigation.navigate('ShowStatus', {userId, photo});
+      navigation.navigate('ShowStatus', {userId, photo, userName});
     } else {
       setIsModalOpen(true);
     }
