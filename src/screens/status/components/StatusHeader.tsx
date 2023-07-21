@@ -179,7 +179,7 @@ const StatusHeader: FC<IProps> = ({
         </View>
       </View>
       <View style={{marginVertical: 10}}>
-        <Text style={{color: '#aaa'}}>Recent updates</Text>
+        <Text style={{color: '#222'}}>Recent updates</Text>
       </View>
     </>
   );

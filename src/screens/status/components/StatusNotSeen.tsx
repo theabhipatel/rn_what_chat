@@ -7,13 +7,15 @@ import getTimeFromNow from '../../../utils/getTimeFromNow';
 
 interface IProps {
   item: IStatusData;
+  handleSeenStatus: (userId: string) => void;
 }
 type NavigationPropType = NavigationProp<IRootStackParamList>;
 
-const StatusNotSeen: FC<IProps> = ({item}) => {
+const StatusNotSeen: FC<IProps> = ({item, handleSeenStatus}) => {
   const navigation = useNavigation<NavigationPropType>();
 
   const handleViewStatus = () => {
+    handleSeenStatus(item.userId);
     navigation.navigate('ShowStatus', {
       userId: item.userId,
       photo: item.userPhoto,

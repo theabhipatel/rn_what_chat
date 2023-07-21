@@ -39,6 +39,7 @@ const Status = () => {
     userId: '',
   });
   const [statusData, setStatusData] = useState<IStatusData[]>([]);
+  const [seenStatusData, setSeenStatusData] = useState<IStatusData[]>([]);
 
   useEffect(() => {
     getUserInfo();
@@ -95,83 +96,111 @@ const Status = () => {
 
   const handleRefresh = () => {
     setRefreshing(true);
+    setSeenStatusData([]);
     getStatusData();
     setRefreshing(false);
   };
 
-  return (
-    <View style={{flex: 1}}>
-      <View>
-        <FlatList
-          data={statusData}
-          style={{paddingHorizontal: 15}}
-          refreshControl={
-            <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
-          }
-          ListHeaderComponent={() => (
-            <StatusHeader
-              setIsModalOpen={setIsModalOpen}
-              photo={userInfo.photo}
-              userId={userInfo.userId}
-              userName={userInfo.name}
-            />
-          )}
-          ItemSeparatorComponent={() => <View style={{marginVertical: 8}} />}
-          renderItem={({item}) => <StatusNotSeen item={item} />}
-          ListEmptyComponent={
-            <View
-              style={{
-                width: '100%',
-                alignItems: 'center',
-                justifyContent: 'center',
-              }}>
-              <Text style={{fontSize: 12, color: '#010101'}}>
-                No recent updates
-              </Text>
-            </View>
-          }
-          ListFooterComponent={() => (
-            <View>
-              <View style={{marginVertical: 10}}>
-                <Text>Viewed updates</Text>
-              </View>
+  const handleSeenStatus = (userId: string) => {
+    const updatedData = statusData.filter(status => status.userId !== userId);
+    setStatusData(updatedData);
+    const seenStatus = statusData.filter(status => status.userId === userId);
+    setSeenStatusData(prev => [...prev, ...seenStatus]);
+  };
 
-              <View>
-                <FlatList
-                  data={[1, 1, 1, 1, 1, 1, 1]}
-                  ItemSeparatorComponent={() => (
-                    <View style={{marginVertical: 8}} />
-                  )}
-                  renderItem={() => <StatusSeen />}
-                  ListFooterComponent={() => <StatusFooter />}
-                />
+  return (
+    <>
+      <View style={{flex: 1}}>
+        <View>
+          <FlatList
+            data={statusData}
+            style={{paddingHorizontal: 15}}
+            refreshControl={
+              <RefreshControl
+                refreshing={refreshing}
+                onRefresh={handleRefresh}
+              />
+            }
+            ListHeaderComponent={() => (
+              <StatusHeader
+                setIsModalOpen={setIsModalOpen}
+                photo={userInfo.photo}
+                userId={userInfo.userId}
+                userName={userInfo.name}
+              />
+            )}
+            ItemSeparatorComponent={() => <View style={{marginVertical: 8}} />}
+            renderItem={({item}) => (
+              <StatusNotSeen item={item} handleSeenStatus={handleSeenStatus} />
+            )}
+            ListEmptyComponent={
+              <View
+                style={{
+                  width: '100%',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}>
+                <Text style={{fontSize: 12, color: '#888'}}>
+                  No recent updates
+                </Text>
               </View>
-            </View>
-          )}
+            }
+            ListFooterComponent={() => (
+              <View>
+                <View style={{marginVertical: 10}}>
+                  <Text style={{color: '#222'}}>Viewed updates</Text>
+                </View>
+
+                <View>
+                  <FlatList
+                    data={seenStatusData}
+                    ItemSeparatorComponent={() => (
+                      <View style={{marginVertical: 8}} />
+                    )}
+                    renderItem={({item}) => <StatusSeen item={item} />}
+                    ListEmptyComponent={
+                      <View
+                        style={{
+                          width: '100%',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                        }}>
+                        <Text style={{fontSize: 12, color: '#888'}}>
+                          No viewed updates
+                        </Text>
+                      </View>
+                    }
+                    ListFooterComponent={() => <StatusFooter />}
+                  />
+                </View>
+              </View>
+            )}
+          />
+        </View>
+        <OpenCameraOrGalleryModal
+          isModalOpen={isModalOpen}
+          setIsModalOpen={setIsModalOpen}
+          setImageData={setImageData}
         />
-        <TouchableOpacity onPress={() => setIsModalOpen(true)}>
-          <View
-            style={{
-              position: 'absolute',
-              bottom: 20,
-              right: 18,
-              padding: 10,
-              backgroundColor: '#128C7E',
-              borderRadius: 30,
-            }}>
-            <Image
-              source={require('../../images/camera.png')}
-              style={{width: 30, height: 30, tintColor: '#fff'}}
-            />
-          </View>
-        </TouchableOpacity>
+        {/* /** -----> bottom updload status button <----  */}
       </View>
-      <OpenCameraOrGalleryModal
-        isModalOpen={isModalOpen}
-        setIsModalOpen={setIsModalOpen}
-        setImageData={setImageData}
-      />
-    </View>
+      <TouchableOpacity onPress={() => setIsModalOpen(true)}>
+        <View
+          style={{
+            position: 'absolute',
+            bottom: 20,
+            right: 18,
+            padding: 10,
+            backgroundColor: '#128C7E',
+            borderRadius: 30,
+          }}>
+          <Image
+            source={require('../../images/camera.png')}
+            style={{width: 30, height: 30, tintColor: '#fff'}}
+          />
+        </View>
+      </TouchableOpacity>
+    </>
   );
 };
 
