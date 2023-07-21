@@ -5,6 +5,7 @@ import {
   View,
   FlatList,
   TouchableOpacity,
+  RefreshControl,
 } from 'react-native';
 import React, {memo, useCallback, useEffect, useState} from 'react';
 import StatusHeader from './components/StatusHeader';
@@ -29,6 +30,7 @@ export interface IUserInfo {
 
 const Status = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [refreshing, setRefreshing] = useState(false);
   const [imageData, setImageData] = useState<ImagePickerResponse>({});
   const [userInfo, setUserInfo] = useState<IUserInfo>({
     name: '',
@@ -55,10 +57,10 @@ const Status = () => {
   }, []);
 
   /** fetching status data here -----> */
-  const isFocused = useIsFocused();
+
   useEffect(() => {
     getStatusData();
-  }, [isFocused]);
+  }, []);
 
   const getStatusData = () => {
     if (userInfo.userId) {
@@ -91,12 +93,21 @@ const Status = () => {
     }
   };
 
+  const handleRefresh = () => {
+    setRefreshing(true);
+    getStatusData();
+    setRefreshing(false);
+  };
+
   return (
     <View style={{flex: 1}}>
       <View>
         <FlatList
           data={statusData}
           style={{paddingHorizontal: 15}}
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
+          }
           ListHeaderComponent={() => (
             <StatusHeader
               setIsModalOpen={setIsModalOpen}
