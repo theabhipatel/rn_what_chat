@@ -60,7 +60,7 @@ const Status = () => {
 
   useEffect(() => {
     getStatusData();
-  }, []);
+  }, [userInfo]);
 
   const getStatusData = () => {
     if (userInfo.userId) {
