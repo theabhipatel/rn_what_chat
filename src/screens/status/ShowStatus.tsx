@@ -15,7 +15,7 @@ import firestore from '@react-native-firebase/firestore';
 import Loader from '../../components/Loader';
 import Video from 'react-native-video';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-// import Animated from 'react-native-reanimated';
+import getTimeFromNow from '../../utils/getTimeFromNow';
 
 type IProps = NativeStackScreenProps<IRootStackParamList, 'ShowStatus'>;
 export interface IStatusData {
@@ -49,7 +49,7 @@ const ShowStatus: FC<IProps> = ({navigation, route}) => {
     }
   }, []);
 
-  const getStatusData = () => {
+  const getStatusData = useCallback(() => {
     const statusRef = firestore()
       .collection('status')
       .where('userId', '==', route.params?.userId);
@@ -64,11 +64,10 @@ const ShowStatus: FC<IProps> = ({navigation, route}) => {
       .catch(error => {
         console.log(error);
       });
-  };
+  }, []);
 
   /** ---------> logic for top status progress bar <------- */
   const progress = useRef(new Animated.Value(0)).current;
-  // console.log('----- statusData[current] ---', statusData[current]);
 
   const startAnimation = (length?: any) => {
     if (statusData[current].contentType.includes('video')) {
@@ -136,7 +135,7 @@ const ShowStatus: FC<IProps> = ({navigation, route}) => {
           backgroundColor: 'rgba(0,0,0,0.3)',
         }}>
         <View style={{flexDirection: 'row', alignItems: 'center'}}>
-          {statusData.map((item, index) => (
+          {statusData.map((_, index) => (
             <View
               key={index}
               style={{
@@ -194,7 +193,9 @@ const ShowStatus: FC<IProps> = ({navigation, route}) => {
               </Text>
 
               <Text style={{color: '#fff', fontSize: 10, fontWeight: '500'}}>
-                Today, 3:45 pm
+                {statusData.length
+                  ? getTimeFromNow(statusData[current].createdAt)
+                  : null}
               </Text>
             </View>
           </View>
@@ -208,16 +209,6 @@ const ShowStatus: FC<IProps> = ({navigation, route}) => {
       </View>
       {/* ---------> Showing Status here <------------  */}
       <View style={{width, height}}>
-        {/* {statusData[current]?.mediaLink && (
-          <Image
-            onLoadEnd={() => {
-              progress.setValue(0);
-              startAnimation();
-            }}
-            source={{uri: statusData[current].mediaLink}}
-            style={{height, width, resizeMode: 'contain'}}
-          />
-        )} */}
         {statusData[current]?.mediaLink ? (
           statusData[current].contentType.includes('image/') ? (
             <Image
