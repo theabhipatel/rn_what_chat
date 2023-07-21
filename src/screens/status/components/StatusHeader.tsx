@@ -11,6 +11,7 @@ import {NavigationProp, useNavigation} from '@react-navigation/native';
 import {IRootStackParamList} from '../../../types';
 import firestore from '@react-native-firebase/firestore';
 import {IStatusData} from '../ShowStatus';
+import getTimeFromNow from '../../../utils/getTimeFromNow';
 
 interface IProps {
   photo: string;
@@ -30,7 +31,7 @@ const StatusHeader: FC<IProps> = ({
   const navigation = useNavigation<NavigationPropType>();
   const [isStatus, setIsStatus] = useState(false);
   const [statusData, setStatusData] = useState<IStatusData[]>([]);
-  // console.log('------ status data in header --->', statusData);
+  const [timeFromNow, setTimeFromNow] = useState('Tap to add status update');
 
   useEffect(() => {
     getStatusData();
@@ -65,6 +66,19 @@ const StatusHeader: FC<IProps> = ({
 
   const handleMorePress = () => {
     navigation.navigate('MyStatus', {statusData, userId, photo});
+  };
+
+  useEffect(() => {
+    timeDifference();
+  }, [statusData]);
+
+  const timeDifference = () => {
+    if (isStatus) {
+      const timeFromNow = getTimeFromNow(
+        statusData[statusData.length - 1].createdAt,
+      );
+      setTimeFromNow(timeFromNow);
+    }
   };
 
   return (
@@ -149,9 +163,7 @@ const StatusHeader: FC<IProps> = ({
               <Text style={{fontSize: 16, color: '#000', fontWeight: '500'}}>
                 My status
               </Text>
-              <Text style={{fontSize: 12, color: '#aaa'}}>
-                Tap to add status update
-              </Text>
+              <Text style={{fontSize: 12, color: '#aaa'}}>{timeFromNow}</Text>
             </View>
           </View>
         </TouchableOpacity>

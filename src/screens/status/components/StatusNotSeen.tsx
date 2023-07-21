@@ -3,6 +3,7 @@ import React, {FC, useEffect, useState} from 'react';
 import {IStatusData} from '../ShowStatus';
 import {NavigationProp, useNavigation} from '@react-navigation/native';
 import {IRootStackParamList} from '../../../types';
+import getTimeFromNow from '../../../utils/getTimeFromNow';
 
 interface IProps {
   item: IStatusData;
@@ -33,13 +34,6 @@ const StatusNotSeen: FC<IProps> = ({item}) => {
             justifyContent: 'center',
             alignItems: 'center',
           }}>
-          {/* <View
-            style={{
-              width: '92%',
-              height: '92%',
-              borderRadius: 25,
-              backgroundColor: '#ccc',
-            }}></View> */}
           <Image
             source={{
               uri: item.contentType.includes('image')
@@ -58,7 +52,9 @@ const StatusNotSeen: FC<IProps> = ({item}) => {
           <Text style={{fontSize: 16, color: '#000', fontWeight: '500'}}>
             {item.userName}
           </Text>
-          <Text style={{fontSize: 12, color: '#aaa'}}>43 minutes ago</Text>
+          <Text style={{fontSize: 12, color: '#aaa'}}>
+            {getTimeFromNow(item.createdAt)}
+          </Text>
         </View>
       </View>
     </TouchableOpacity>
