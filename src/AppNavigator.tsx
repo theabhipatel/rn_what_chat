@@ -19,6 +19,9 @@ import TopTabNavigator from './TopTabNavigator';
 import Profile from './screens/Profile';
 import Chat from './screens/chat/Chat';
 import TopMenuModal from './components/TopMenuModal';
+import UploadStatus from './screens/status/UploadStatus';
+import ShowStatus from './screens/status/ShowStatus';
+import MyStatus from './screens/status/MyStatus';
 
 const Stack = createNativeStackNavigator<IRootStackParamList>();
 
@@ -108,6 +111,21 @@ const AppNavigator = () => {
           name="Chat"
           component={Chat}
           options={{headerShown: true}}
+        />
+        <Stack.Screen
+          name="UploadStatus"
+          component={UploadStatus}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="ShowStatus"
+          component={ShowStatus}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="MyStatus"
+          component={MyStatus}
+          options={{headerShown: true, headerTitle: 'My status'}}
         />
       </Stack.Navigator>
     </NavigationContainer>

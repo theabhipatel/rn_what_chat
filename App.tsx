@@ -4,9 +4,9 @@ import AppNavigator from './src/AppNavigator';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
 import SplashScreen from 'react-native-splash-screen';
 const App = () => {
-  useEffect(() => {
-    SplashScreen.hide();
-  }, []);
+  // useEffect(() => {
+  //   // SplashScreen.hide();
+  // }, []);
   return (
     <GestureHandlerRootView style={{flex: 1}}>
       <SafeAreaView style={{flex: 1}}>
