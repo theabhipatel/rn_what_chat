@@ -6,13 +6,15 @@ import com.facebook.react.defaults.DefaultNewArchitectureEntryPoint;
 import com.facebook.react.defaults.DefaultReactActivityDelegate;
 import android.os.Bundle; // added by me
 import org.devio.rn.splashscreen.SplashScreen; // added by me
+import android.os.Handler; // added by me
 
 public class MainActivity extends ReactActivity {
 
   @Override
       protected void onCreate(Bundle savedInstanceState) {
          SplashScreen.show(this,R.style.SplashScreenTheme, true);  // addded by me
-          super.onCreate(savedInstanceState);
+        super.onCreate(savedInstanceState);
+        new Handler().postDelayed(() -> SplashScreen.hide(this), 1000); // added by me
       }
   /**
    * Returns the name of the main component registered from JavaScript. This is used to schedule
